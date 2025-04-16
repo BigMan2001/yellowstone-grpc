@@ -195,6 +195,19 @@ impl FilteredUpdate {
                     is_vote: msg.transaction.is_vote,
                     index: msg.transaction.index as u64,
                     err: msg.transaction.meta.err.clone(),
+                    // post_accounts_states: msg
+                    //     .transaction
+                    //     .post_account_states
+                    //     .iter()
+                    //     .map(|(pubkey, account)| SubscribeUpdatePostAccountState {
+                    //         pubkey: pubkey.as_ref().to_vec(),         // convert Pubkey to bytes
+                    //         lamports: account.lamports(),
+                    //         owner: account.owner().as_ref().to_vec(), // convert owner’s Pubkey to bytes
+                    //         executable: account.executable(),
+                    //         rent_epoch: account.rent_epoch(),
+                    //         data: account.data().to_vec(),            // raw account data
+                    //     })
+                    //     .collect(),
                 })
             }
             FilteredUpdateOneof::Block(msg) => UpdateOneof::Block(SubscribeUpdateBlock {
@@ -282,6 +295,7 @@ impl FilteredUpdate {
                         },
                         index: msg.index as usize,
                         account_keys: HashSet::new(),
+                        post_account_states: Vec::new(),
                     }),
                     slot: msg.slot,
                 })
@@ -1175,6 +1189,7 @@ pub mod tests {
                             meta: convert_to::create_transaction_meta(&tx.meta),
                             index,
                             account_keys: HashSet::new(),
+                            post_account_states: Vec::new(),
                         }
                     })
                     .map(Arc::new)

@@ -15,10 +15,7 @@ use {
     },
     prost_types::Timestamp,
     solana_sdk::{
-        clock::Slot,
-        hash::{Hash, HASH_BYTES},
-        pubkey::Pubkey,
-        signature::Signature,
+        account::AccountSharedData, clock::Slot, hash::{Hash, HASH_BYTES}, pubkey::Pubkey, signature::Signature
     },
     std::{
         collections::HashSet,
@@ -271,6 +268,7 @@ pub struct MessageTransactionInfo {
     pub meta: confirmed_block::TransactionStatusMeta,
     pub index: usize,
     pub account_keys: HashSet<Pubkey>,
+    pub post_account_states: Vec<(Pubkey, AccountSharedData)>,
 }
 
 impl MessageTransactionInfo {
@@ -290,6 +288,7 @@ impl MessageTransactionInfo {
             meta: convert_to::create_transaction_meta(info.transaction_status_meta),
             index: info.index,
             account_keys,
+            post_account_states: Vec::new(),
         }
     }
 
@@ -304,6 +303,7 @@ impl MessageTransactionInfo {
             meta: msg.meta.ok_or("meta message should be defined")?,
             index: msg.index as usize,
             account_keys: HashSet::new(),
+            post_account_states: Vec::new(),
         })
     }
 

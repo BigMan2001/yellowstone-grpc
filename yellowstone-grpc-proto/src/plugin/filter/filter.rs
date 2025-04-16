@@ -1186,6 +1186,7 @@ mod tests {
                 meta,
                 index: 1,
                 account_keys,
+                post_account_states: Vec::new(),
             }),
             slot: 100,
             created_at: Timestamp::from(SystemTime::now()),
